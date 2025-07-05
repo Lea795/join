@@ -413,24 +413,6 @@ async function checkUserIsPresent(parameter = false) {
   }
 }
 
-// /**
-//  *
-//  * @async
-//  * @function handleUserPresenceCheck
-//  * @description Checks user presence based on the provided parameter. If the parameter is true,
-//  * it calls `ifParameterTrue`. If the parameter is false, it asynchronously calls `ifParameterFalse`.
-//  * @param {*} parameter - A boolean flag determining which check to perform.
-//  * @param {object} user - The user object to check against.
-//  * @param {string} userId - The ID of the user (only relevant when parameter is false).
-//  * @returns {Promise<boolean>} - Returns the boolean result of either `ifParameterTrue` or `ifParameterFalse`.
-// */
-// async function handleUserPresenceCheck(parameter, user, userId) {
-//   if (parameter) {
-//     return ifParameterTrue(parameter, user);
-//   } else {
-//     return await ifParameterFalse(parameter, user, userId);
-//   }
-// }
 /**
  *
  * @async
@@ -540,29 +522,6 @@ async function ifParameterFalse(parameter, user, userId) {
   return false; 
 }
 
-//   /**
-//  *
-//  * @function showLoginError
-//  * @description Displays the generic login error message if neither the specific email nor password error messages are currently visible.
-//  * It also adds the 'not-valide-error' class to the email and password input fields to visually indicate an error,
-//  * preventing duplicate application of the error class. It utilizes the `handleGenericLoginErrorDisplay` function
-//  * to manage the visibility of the main error message.
-//  */
-// function showLoginError() {
-//     const { errorMessageLogInRef, passwordLogInRef, emailLogInRef, errorMessageEmailNotValideLoginRef, errorMessagePasswordLogInRef } = getIdRefs();
-//     const isEmailErrorVisible = errorMessageEmailNotValideLoginRef && errorMessageEmailNotValideLoginRef.classList.contains('d-flex');
-//     const isPasswordErrorVisible = errorMessagePasswordLogInRef && errorMessagePasswordLogInRef.classList.contains('d-flex');
-  
-//     handleGenericLoginErrorDisplay(errorMessageLogInRef, isEmailErrorVisible, isPasswordErrorVisible);
-  
-//     if (emailLogInRef && !emailLogInRef.classList.contains('not-valide-error')) {
-//       emailLogInRef.classList.add('not-valide-error');
-//     }
-//     if (passwordLogInRef && !passwordLogInRef.classList.contains('not-valide-error')) {
-//       passwordLogInRef.classList.add('not-valide-error');
-//     }
-//   }
-
 function showLoginError() {
   const {
     errorMessageLogInRef,
@@ -570,29 +529,34 @@ function showLoginError() {
     passwordLogInRef
   } = getIdRefs();
 
-  if (errorMessageLogInRef) {
-    errorMessageLogInRef.classList.add('d-flex');
+  displayGenericLoginError({
+    errorMessageRef: errorMessageLogInRef,
+    emailInputRef: emailLogInRef,
+    passwordInputRef: passwordLogInRef
+  });
+}
+
+function displayGenericLoginError({ errorMessageRef, emailInputRef, passwordInputRef }) {
+  if (errorMessageRef) {
+    errorMessageRef.classList.add('d-flex');
+    errorMessageRef.style.display = 'block';
   }
 
-  if (emailLogInRef) {
-    emailLogInRef.classList.add('not-valide-error');
+  if (emailInputRef) {
+    emailInputRef.classList.add('not-valide-error');
   }
-  if (passwordLogInRef) {
-    passwordLogInRef.classList.add('not-valide-error');
+
+  if (passwordInputRef) {
+    passwordInputRef.classList.add('not-valide-error');
+  }
+}
+
+function removeLoginError() {
+  const { errorMessageLogInRef } = getIdRefs();
+  if (errorMessageLogInRef) {
+    errorMessageLogInRef.classList.remove('d-flex');
+    errorMessageLogInRef.style.display = 'none';
   }
 }
 
 
-  /**
- * 
- * @function removeLoginError
- * @description Retrieves references to the login error message, email input, and password input elements using `getIdRefs()`.
- * It then removes the 'd-flex' class from the error message to hide it and the 'not-valide-error' class from both the email and password input fields to remove the error indication.
- *
- */
-function removeLoginError(){
-    const { errorMessageLogInRef, passwordLogInRef, emailLogInRef } = getIdRefs();
-    errorMessageLogInRef.classList.remove('d-flex');
-    emailLogInRef.classList.remove('not-valide-error');
-    passwordLogInRef.classList.remove('not-valide-error');
-  }
